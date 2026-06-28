@@ -23,12 +23,13 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   ...(process.env.FRONTEND_URL || '').split(','),
-].map(s => s.trim()).filter(Boolean);
+].map(s => s.trim().replace(/\/+$/, '')).filter(Boolean);
 
 app.use(cors({
   origin: (origin, cb) => {
     if (!origin) return cb(null, true);
-    if (allowedOrigins.some(o => origin === o || origin.startsWith(o))) return cb(null, true);
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+    if (allowedOrigins.some(o => normalizedOrigin === o)) return cb(null, true);
     if (process.env.NODE_ENV !== 'production' && origin.endsWith('.trycloudflare.com')) return cb(null, true);
     const err = new Error('Not allowed by CORS');
     err.status = 403;

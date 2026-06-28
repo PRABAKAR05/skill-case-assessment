@@ -9,6 +9,13 @@
   --accent: #6c63ff;
   --danger: #ef4444;
   --success: #22c55e;
+  --bottom-nav-h: 60px;
+  --mobile-controls-gap: 38px;
+  --app-viewport-h: 100vh;
+}
+
+@supports (height: 100dvh) {
+  :root { --app-viewport-h: 100dvh; }
 }
 
 html, body {
@@ -19,7 +26,7 @@ html, body {
   overflow: hidden;
 }
 
-#root { height: 100vh; }
+#root { height: var(--app-viewport-h); }
 
 button { cursor: pointer; border: none; background: none; font-family: inherit; }
 input, textarea { font-family: inherit; outline: none; }
@@ -35,7 +42,7 @@ a { text-decoration: none; color: inherit; }
 /* ── Page outer shell ───────────────────────────────────── */
 .page-outer {
   display: flex;
-  height: 100vh;
+  height: var(--app-viewport-h);
   overflow: hidden;
   background: #111;
 }
@@ -44,7 +51,7 @@ a { text-decoration: none; color: inherit; }
 .sidebar {
   width: 72px;
   min-width: 72px;
-  height: 100vh;
+  height: var(--app-viewport-h);
   background: #0d0d0d;
   display: flex;
   flex-direction: column;
@@ -237,21 +244,24 @@ a { text-decoration: none; color: inherit; }
 .reel-mobile-actions {
   position: absolute;
   right: 12px;
-  bottom: 110px;
+  bottom: calc(var(--bottom-nav-h) + var(--mobile-controls-gap) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   z-index: 15;
 }
 
 .reel-mobile-info {
   position: absolute;
-  bottom: 80px;
+  bottom: calc(var(--bottom-nav-h) + var(--mobile-controls-gap) + env(safe-area-inset-bottom));
   left: 16px;
-  right: 72px;
+  right: 82px;
   z-index: 15;
-  pointer-events: none;
+  max-height: 30vh;
+  overflow: hidden;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 /* ── Info text ──────────────────────────────────────────── */
@@ -334,9 +344,7 @@ a { text-decoration: none; color: inherit; }
   .sidebar { display: none !important; }
   .nav-arrows { display: none !important; }
   .reel-desktop-inner { display: none !important; }
-  /* Shift mobile actions up so they clear the bottom nav */
-  .reel-mobile-actions { bottom: 80px !important; }
-  .reel-mobile-info { bottom: 88px !important; }
+  .reel-mobile-actions { right: 16px; }
 }
 
 @media (min-width: 769px) {

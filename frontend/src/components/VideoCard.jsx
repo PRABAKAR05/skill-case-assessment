@@ -156,6 +156,16 @@ export default function VideoCard({ video, onUpdate }) {
     else { el.pause(); setPaused(true); }
   };
 
+  const hideInfo = (e) => {
+    e.stopPropagation();
+    setShowInfo(false);
+  };
+
+  const showInfoAgain = (e) => {
+    e.stopPropagation();
+    setShowInfo(true);
+  };
+
   const videoSrc = video.file_path.startsWith('http')
     ? video.file_path
     : `${API_URL}${video.file_path}`;
@@ -218,7 +228,7 @@ export default function VideoCard({ video, onUpdate }) {
                 style={{ cursor: 'pointer' }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                onClick={() => setShowInfo(false)}
+                onClick={hideInfo}
               >
                 {info}
               </motion.div>
@@ -229,7 +239,7 @@ export default function VideoCard({ video, onUpdate }) {
           {!showInfo && (
             <motion.button
               style={S.infoToggle}
-              onClick={() => setShowInfo(true)}
+              onClick={showInfoAgain}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               title="Show info"
@@ -297,12 +307,18 @@ export default function VideoCard({ video, onUpdate }) {
 
 const S = {
   slide: {
-    height: '100vh', width: '100%', scrollSnapAlign: 'start', flexShrink: 0,
+    height: 'var(--app-viewport-h)', width: '100%', scrollSnapAlign: 'start', flexShrink: 0,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     background: '#111', overflow: 'hidden', position: 'relative',
   },
   mobileVideo: {
-    position: 'absolute', inset: 0, width: '100%', height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 'calc(var(--bottom-nav-h) + env(safe-area-inset-bottom))',
+    width: '100%',
+    height: 'calc(100% - var(--bottom-nav-h) - env(safe-area-inset-bottom))',
     objectFit: 'contain', background: '#000', cursor: 'pointer', zIndex: 1,
   },
   pauseOverlay: {
@@ -316,7 +332,7 @@ const S = {
     zIndex: 2, pointerEvents: 'none',
   },
   infoToggle: {
-    position: 'absolute', bottom: 82, left: 16, zIndex: 16,
+    position: 'absolute', bottom: 'calc(112px + env(safe-area-inset-bottom))', left: 16, zIndex: 16,
     width: 32, height: 32, borderRadius: '50%',
     background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center',

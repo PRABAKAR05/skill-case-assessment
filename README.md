@@ -2,6 +2,10 @@
 
 SkillShorts is a full-stack short-video learning platform built for the Skillcase Intern Assessment. It provides a vertical shorts feed with authentication, likes, comments, bookmarks, local video serving, and a clean split between routes, controllers, services, middleware, and UI layers.
 
+## Live Demo
+
+Deployed demo: https://skillcase-assessment.vercel.app/
+
 ## Tech Stack
 
 - Frontend: React, Vite, React Router, Redux Toolkit, Axios, Framer Motion

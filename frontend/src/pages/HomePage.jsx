@@ -55,7 +55,8 @@ export default function HomePage() {
     const feed = feedRef.current;
     if (!feed) return;
     const onScroll = () => {
-      const idx = Math.round(feed.scrollTop / window.innerHeight);
+      const slideHeight = feed.clientHeight || window.innerHeight;
+      const idx = Math.round(feed.scrollTop / slideHeight);
       setCurrentIdx(idx);
     };
     feed.addEventListener('scroll', onScroll, { passive: true });
@@ -66,7 +67,8 @@ export default function HomePage() {
 
   const scrollToIdx = (idx) => {
     if (!feedRef.current || idx < 0 || idx >= videos.length) return;
-    feedRef.current.scrollTo({ top: idx * window.innerHeight, behavior: 'smooth' });
+    const slideHeight = feedRef.current.clientHeight || window.innerHeight;
+    feedRef.current.scrollTo({ top: idx * slideHeight, behavior: 'smooth' });
     setCurrentIdx(idx);
   };
 
@@ -112,20 +114,10 @@ export default function HomePage() {
       {/* Main content */}
       <div className="content-area">
 
-        {/* Mobile: minimal top strip — brand only, no @username */}
-        {isMobile && (
-          <div style={S.mobileTop}>
-            <span style={S.logo}>SkillShorts</span>
-            {!user && (
-              <button style={S.loginBadge} onClick={() => navigate('/login')}>Log In</button>
-            )}
-          </div>
-        )}
-
         {/* Vertical scroll-snap feed */}
         <div ref={feedRef} className="feed-scroll" style={S.feed}>
           {videos.length === 0 ? (
-            <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ height: 'var(--app-viewport-h)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <p style={{ color: '#555' }}>No videos yet.</p>
             </div>
           ) : (
@@ -162,7 +154,7 @@ export default function HomePage() {
 
 const S = {
   center: {
-    height: '100vh', background: '#111',
+    height: 'var(--app-viewport-h)', background: '#111',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   spinner: {
@@ -170,20 +162,7 @@ const S = {
     border: '3px solid rgba(255,255,255,0.12)', borderTopColor: 'var(--accent)',
   },
   feed: {
-    height: '100vh', width: '100%',
+    height: 'var(--app-viewport-h)', width: '100%',
     overflowY: 'scroll', scrollSnapType: 'y mandatory',
-  },
-  mobileTop: {
-    position: 'absolute', top: 0, left: 0, right: 0, zIndex: 100,
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '14px 16px',
-    background: 'linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, transparent 100%)',
-    pointerEvents: 'none',
-  },
-  logo: { fontSize: 18, fontWeight: 800, color: '#fff', letterSpacing: '-0.5px', pointerEvents: 'all' },
-  loginBadge: {
-    padding: '5px 14px', borderRadius: 20,
-    background: 'var(--accent)', color: '#fff', fontSize: 12, fontWeight: 700,
-    border: 'none', cursor: 'pointer', pointerEvents: 'all',
   },
 };

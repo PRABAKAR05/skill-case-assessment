@@ -49,7 +49,9 @@ export default function BottomNav() {
 const S = {
   nav: {
     position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 200,
-    height: 60, display: 'flex', alignItems: 'center',
+    height: 'calc(var(--bottom-nav-h) + env(safe-area-inset-bottom))',
+    paddingBottom: 'env(safe-area-inset-bottom)',
+    display: 'flex', alignItems: 'center',
     background: 'rgba(10,10,10,0.95)',
     backdropFilter: 'blur(12px)',
     borderTop: '1px solid #1e1e1e',
